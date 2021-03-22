@@ -10,11 +10,11 @@ Per https://nx.dev/latest/react/next/build#nextconfig as a user I expect adding 
 
 ### Two
 Generated `next.config.js` is not correctly formatted for consumption. I discovered this issue after hard coding the config path to be fully qualified.
-> TypeError: userNextConfig is not a function
+TypeError: userNextConfig is not a function
 ## Debugging
 ### Environment
 ```
->  NX  Report complete - copy this into the issue template
+ NX  Report complete - copy this into the issue template
 
   Node : 10.16.3
   OS   : darwin x64
@@ -53,41 +53,44 @@ Generated `next.config.js` is not correctly formatted for consumption. I discove
 
 ## Logs
 ### Nx Build
-> ❯ nx-next-config-bug (main) ✘ nx build
-> nx run nx-next-config-bug:build
->Browserslist: caniuse-lite is outdated. Please run:
->npx browserslist@latest --update-db
->Cannot find module 'next.config.js'
-
+```
+❯ nx-next-config-bug (main) ✘ nx build
+nx run nx-next-config-bug:build
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+Cannot find module 'next.config.js'
+```
 ### Nx Build Verbose
-> nx build --verbose
-> Browserslist: caniuse-lite is outdated. Please run:
-> npx browserslist@latest --update-db
-> Cannot find module 'next.config.js'
-> Error: Cannot find module 'next.config.js'
->     at Function.Module._resolveFilename (internal/modules/cjs/loader.js:636:15)
->     at Function.Module._load (internal/modules/cjs/loader.js:562:25)
->     at Module.require (internal/modules/cjs/loader.js:692:17)
->     at Module.require (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/tao/src/compat/compat.js:7:40)
->     at require (internal/modules/cjs/helpers.js:25:18)
->     at Object.prepareConfig (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/next/src/utils/config.js:85:11)
->     at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/next/src/executors/build/build.impl.js:19:33
->     at Generator.next (<anonymous>)
->     at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:117:75
->     at new Promise (<anonymous>)
->     at Object.__awaiter (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:113:16)
->     at buildExecutor (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/next/src/executors/build/build.impl.js:17:20)
->     at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/tao/src/commands/run.js:122:23
->     at Generator.next (<anonymous>)
->     at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:117:75
->     at new Promise (<anonymous>)
+```
+nx build --verbose
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+Cannot find module 'next.config.js'
+Error: Cannot find module 'next.config.js'
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:636:15)
+    at Function.Module._load (internal/modules/cjs/loader.js:562:25)
+    at Module.require (internal/modules/cjs/loader.js:692:17)
+    at Module.require (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/tao/src/compat/compat.js:7:40)
+    at require (internal/modules/cjs/helpers.js:25:18)
+    at Object.prepareConfig (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/next/src/utils/config.js:85:11)
+    at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/next/src/executors/build/build.impl.js:19:33
+    at Generator.next (<anonymous>)
+    at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:117:75
+    at new Promise (<anonymous>)
+    at Object.__awaiter (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:113:16)
+    at buildExecutor (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/next/src/executors/build/build.impl.js:17:20)
+    at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/tao/src/commands/run.js:122:23
+    at Generator.next (<anonymous>)
+    at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:117:75
+    at new Promise (<anonymous>)
+```
 
 ### Nx build (modified)
-> Delta: Replace `next.config.js` with fully qualified file path to the location
+Delta: Replace `next.config.js` with fully qualified file path to the location
 
-> Note: The module is found when referenced this way but is not correct.
+Note: The module is found when referenced this way but is not correct.
 ```
-> nx run nx-next-config-bug:build --verbose
+nx run nx-next-config-bug:build --verbose
 Browserslist: caniuse-lite is outdated. Please run:
 npx browserslist@latest --update-db
 userNextConfig is not a function
@@ -105,7 +108,7 @@ TypeError: userNextConfig is not a function
     at new Promise (<anonymous>)
     at Object.__awaiter (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:113:16)
     at runExecutorInternal (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/tao/src/commands/run.js:103:20)
-    at Object.<anonymous> (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/tao/src/commands/run.js:191:54)
+    at Object.<anonymous(/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/tao/src/commands/run.js:191:54)
     at Generator.next (<anonymous>)
     at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:117:75
 ```
