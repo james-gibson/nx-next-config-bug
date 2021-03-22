@@ -28,7 +28,8 @@
           "outputs": ["{options.outputPath}"],
           "options": {
             "root": "apps/nx-next-config-bug",
-            "outputPath": "dist/apps/nx-next-config-bug"
+            "outputPath": "dist/apps/nx-next-config-bug",
+            "nextConfig": "next.config.js"
           },
           "configurations": {
             "production": {}

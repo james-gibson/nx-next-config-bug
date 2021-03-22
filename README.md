@@ -2,93 +2,110 @@
 
 # NxNextConfigBug
 
-This project was generated using [Nx](https://nx.dev).
+This project was generated to verify the existence of a config bug between Nrwl Nx and Next.js.
 
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+## Bug
+### One
+Per https://nx.dev/latest/react/next/build#nextconfig as a user I expect adding `"nextConfig": "next.config.js"` to my configuration should cause Nx to use this custom Next.js config.
 
-🔎 **Nx is a set of Extensible Dev Tools for Monorepos.**
+### Two
+Generated `next.config.js` is not correctly formatted for consumption. I discovered this issue after hard coding the config path to be fully qualified.
+> TypeError: userNextConfig is not a function
+## Debugging
+### Environment
+```
+>  NX  Report complete - copy this into the issue template
 
-## Adding capabilities to your workspace
+  Node : 10.16.3
+  OS   : darwin x64
+  npm  : 6.9.0
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+  nx : Not Found
+  @nrwl/angular : Not Found
+  @nrwl/cli : 11.5.2
+  @nrwl/cypress : 11.5.2
+  @nrwl/devkit : 11.5.2
+  @nrwl/eslint-plugin-nx : 11.5.2
+  @nrwl/express : Not Found
+  @nrwl/jest : 11.5.2
+  @nrwl/linter : 11.5.2
+  @nrwl/nest : Not Found
+  @nrwl/next : 11.5.2
+  @nrwl/node : Not Found
+  @nrwl/react : 11.5.2
+  @nrwl/schematics : Not Found
+  @nrwl/tao : 11.5.2
+  @nrwl/web : 11.5.2
+  @nrwl/workspace : 11.5.2
+  @nrwl/storybook : 11.5.2
+  @nrwl/gatsby : Not Found
+  typescript : 4.0.7
+```
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
-
-Below are our core plugins:
-
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
-
-There are also many [community plugins](https://nx.dev/nx-community) you could add.
-
-## Generate an application
-
-Run `nx g @nrwl/react:app my-app` to generate an application.
-
-> You can use any of the plugins above to generate applications as well.
-
-When using Nx, you can create multiple applications and libraries in the same workspace.
-
-## Generate a library
-
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
-
-> You can also use any of the plugins above to generate libraries as well.
-
-Libraries are shareable across libraries and applications. They can be imported from `@nx-next-config-bug/mylib`.
-
-## Development server
-
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
-
-## Build
-
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev) to learn more.
+#### How this was set up
+- `npx create-nx-workspace@latest nx-next-config-bug`
+- `cd nx-next-config-bug`
+- `nx build` <= ( Works )
+- Add `"nextConfig": "next.config.js"` to `workspaceJson.projects.'nx-next-config-bug'.targets.build.options`
+- Add console.log to `next.config.js` (to verify it's executed, it never runs)
+- `nx build` <= ( fails)
 
 
+## Logs
+### Nx Build
+> ❯ nx-next-config-bug (main) ✘ nx build
+> nx run nx-next-config-bug:build
+>Browserslist: caniuse-lite is outdated. Please run:
+>npx browserslist@latest --update-db
+>Cannot find module 'next.config.js'
 
-## ☁ Nx Cloud
+### Nx Build Verbose
+> nx build --verbose
+> Browserslist: caniuse-lite is outdated. Please run:
+> npx browserslist@latest --update-db
+> Cannot find module 'next.config.js'
+> Error: Cannot find module 'next.config.js'
+>     at Function.Module._resolveFilename (internal/modules/cjs/loader.js:636:15)
+>     at Function.Module._load (internal/modules/cjs/loader.js:562:25)
+>     at Module.require (internal/modules/cjs/loader.js:692:17)
+>     at Module.require (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/tao/src/compat/compat.js:7:40)
+>     at require (internal/modules/cjs/helpers.js:25:18)
+>     at Object.prepareConfig (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/next/src/utils/config.js:85:11)
+>     at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/next/src/executors/build/build.impl.js:19:33
+>     at Generator.next (<anonymous>)
+>     at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:117:75
+>     at new Promise (<anonymous>)
+>     at Object.__awaiter (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:113:16)
+>     at buildExecutor (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/next/src/executors/build/build.impl.js:17:20)
+>     at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/tao/src/commands/run.js:122:23
+>     at Generator.next (<anonymous>)
+>     at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:117:75
+>     at new Promise (<anonymous>)
 
-### Computation Memoization in the Cloud
+### Nx build (modified)
+> Delta: Replace `next.config.js` with fully qualified file path to the location
 
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+> Note: The module is found when referenced this way but is not correct.
+```
+> nx run nx-next-config-bug:build --verbose
+Browserslist: caniuse-lite is outdated. Please run:
+npx browserslist@latest --update-db
+userNextConfig is not a function
+TypeError: userNextConfig is not a function
+    at Object.prepareConfig (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/next/src/utils/config.js:94:12)
+    at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/next/src/executors/build/build.impl.js:19:33
+    at Generator.next (<anonymous>)
+    at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:117:75
+    at new Promise (<anonymous>)
+    at Object.__awaiter (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:113:16)
+    at buildExecutor (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/next/src/executors/build/build.impl.js:17:20)
+    at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/tao/src/commands/run.js:122:23
+    at Generator.next (<anonymous>)
+    at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:117:75
+    at new Promise (<anonymous>)
+    at Object.__awaiter (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:113:16)
+    at runExecutorInternal (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/tao/src/commands/run.js:103:20)
+    at Object.<anonymous> (/Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/@nrwl/tao/src/commands/run.js:191:54)
+    at Generator.next (<anonymous>)
+    at /Users/jgibson/src/prototypes/nx-next-config-bug/node_modules/tslib/tslib.js:117:75
+```
