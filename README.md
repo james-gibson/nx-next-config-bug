@@ -24,6 +24,7 @@ module.exports = (phase, config, options ) => withNx({});
 ### Tl;Dr
 I think bug one is somewhere near https://github.com/nrwl/nx/blob/master/packages/next/src/utils/config.ts#L130
 
+I think bug two is related and is caused by this method execution https://github.com/nrwl/nx/blob/master/packages/next/src/utils/config.ts#L145
 
 ### Environment
 ```
