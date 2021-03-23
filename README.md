@@ -6,12 +6,25 @@ This project was generated to verify the existence of a config bug between Nrwl 
 
 ## Bug
 ### One
-Per https://nx.dev/latest/react/next/build#nextconfig as a user I expect adding `"nextConfig": "next.config.js"` to my configuration should cause Nx to use this custom Next.js config.
+Per https://nx.dev/latest/react/next/build#nextconfig as a user I expect adding `"nextConfig": "next.config.js"` to my configuration should cause Nx to use the custom Next.js config at `apps/nx-next-config-bug/next.config.js`
 
 ### Two
 Generated `next.config.js` is not correctly formatted for consumption. I discovered this issue after hard coding the config path to be fully qualified.
-TypeError: userNextConfig is not a function
+`TypeError: userNextConfig is not a function`
+```
+# Default code (throws error, never launches next build)
+module.exports = withNx({});
+```
+
+```
+# Modified code (launches next build, fails because of unrelated missing svg loader)
+module.exports = (phase, config, options ) => withNx({});
+```
 ## Debugging
+### Tl;Dr
+I think bug one is somewhere near https://github.com/nrwl/nx/blob/master/packages/next/src/utils/config.ts#L130
+
+
 ### Environment
 ```
  NX  Report complete - copy this into the issue template
@@ -85,7 +98,7 @@ Error: Cannot find module 'next.config.js'
     at new Promise (<anonymous>)
 ```
 
-### Nx build (modified)
+### Nx build (modified) [bug 2]
 Delta: Replace `next.config.js` with fully qualified file path to the location
 
 Note: The module is found when referenced this way but is not correct.

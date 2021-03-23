@@ -29,7 +29,7 @@
           "options": {
             "root": "apps/nx-next-config-bug",
             "outputPath": "dist/apps/nx-next-config-bug",
-            "nextConfig": "next.config.js"
+            "nextConfig": "/Users/jgibson/src/prototypes/nx-next-config-bug/apps/nx-next-config-bug/next.config.js"
           },
           "configurations": {
             "production": {}
