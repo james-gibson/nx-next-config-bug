@@ -29,7 +29,7 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "document-register-element": "1.13.1",
-    "next": "10.0.1",
+    "next": "10.2.3",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "tslib": "^2.0.0"
@@ -44,10 +44,10 @@
     "@nrwl/eslint-plugin-nx": "11.5.2",
     "@nrwl/jest": "11.5.2",
     "@nrwl/linter": "11.5.2",
-    "@nrwl/next": "11.5.2",
-    "@nrwl/react": "11.5.2",
+    "@nrwl/next": "15.9.2",
+    "@nrwl/react": "15.9.2",
     "@nrwl/tao": "11.5.2",
-    "@nrwl/web": "11.5.2",
+    "@nrwl/web": "15.9.2",
     "@nrwl/workspace": "11.5.2",
     "@testing-library/react": "11.1.2",
     "@types/jest": "26.0.8",
